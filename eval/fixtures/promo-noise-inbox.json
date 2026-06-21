@@ -1,0 +1,54 @@
+{
+  "name": "promo-noise-inbox (synthetic) — precision guard, expects ZERO deadlines",
+  "messages": [
+    {
+      "id": "n1",
+      "thread": "tn1",
+      "from": { "email": "notifications-noreply@linkedin.com", "name": "LinkedIn", "role_guess": "unknown" },
+      "subject": "Draw A Fence posted — register for Talent Connect",
+      "body": "A company you follow posted an update. Register by March 14, 2026 for the speaker lineup. Unsubscribe or manage your preferences.",
+      "date": "2026-02-20T09:00:00.000Z",
+      "labels": ["CATEGORY_SOCIAL", "INBOX"]
+    },
+    {
+      "id": "n2",
+      "thread": "tn2",
+      "from": { "email": "billing@lucidchart.com", "name": "Lucidchart", "role_guess": "unknown" },
+      "subject": "Receipt for your new Lucidchart trial",
+      "body": "Your free trial started. Your first payment is due April 1, 2026. View your receipt in browser. Unsubscribe.",
+      "date": "2026-03-01T12:00:00.000Z",
+      "labels": ["CATEGORY_UPDATES", "INBOX"]
+    },
+    {
+      "id": "n3",
+      "thread": "tn3",
+      "from": { "email": "no-reply@notify.example.com", "name": "Example", "role_guess": "admin" },
+      "subject": "Updates to our terms and data use",
+      "body": "We've updated our terms and data use. Please review the form. Changes take effect May 1, 2026.",
+      "date": "2026-04-10T08:00:00.000Z",
+      "labels": ["CATEGORY_UPDATES", "INBOX"]
+    },
+    {
+      "id": "n4",
+      "thread": "tn4",
+      "from": { "email": "deals@shopmail.com", "name": "ShopMail", "role_guess": "unknown" },
+      "subject": "50% off — flash sale ends soon",
+      "body": "Our flash sale ends March 20, 2026. Submit your order before the deal expires! Unsubscribe.",
+      "date": "2026-03-15T07:00:00.000Z",
+      "labels": ["CATEGORY_PROMOTIONS", "INBOX"]
+    },
+    {
+      "id": "n5",
+      "thread": "tn5",
+      "from": { "email": "newsletter@medium.com", "name": "Medium Daily Digest", "role_guess": "unknown" },
+      "subject": "Your weekly project digest",
+      "body": "Here are the top posts this week. New stories published June 2, 2026. Manage your subscription or unsubscribe.",
+      "date": "2026-05-28T06:00:00.000Z",
+      "labels": ["CATEGORY_UPDATES", "INBOX"]
+    }
+  ],
+  "gold": {
+    "deadlines": [],
+    "events": []
+  }
+}

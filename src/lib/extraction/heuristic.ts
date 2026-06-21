@@ -9,6 +9,7 @@
 
 import type { Message, Deadline, Event, Action, Category, Confidence } from "@/lib/model";
 import type { Extractor, ExtractionResult } from "./types";
+import { assessNoise } from "./noise";
 
 const MONTHS: Record<string, number> = {
   jan: 0, january: 0, feb: 1, february: 1, mar: 2, march: 2, apr: 3, april: 3,
@@ -96,8 +97,14 @@ export class HeuristicExtractor implements Extractor {
       const date = findDate(haystack, msg.date);
 
       if (cue && date) {
+        const noise = assessNoise(msg);
+        // Precision (§7): drop clear promo/social/transactional noise so the
+        // surface isn't flooded with "your free trial started" style mail.
+        if (noise.suppress) continue;
         const inSubject = cue.re.test(msg.subject);
-        const confidence = clamp(cue.base + (inSubject ? 0.1 : 0) - (date.numeric ? 0.05 : 0));
+        const confidence = clamp(
+          cue.base + (inSubject ? 0.1 : 0) - (date.numeric ? 0.05 : 0) - noise.penalty,
+        );
         if (isEventCategory(cue.category)) {
           events.push({
             id: `ev_${msg.id}`,
