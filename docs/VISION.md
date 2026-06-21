@@ -5,6 +5,8 @@
 
 This repo's Gmail deadline surface is the **MVP** — the smallest believable proof of a much bigger thesis. This document is the north star; [`FINAL-PLAN.md`](./FINAL-PLAN.md) is the locked 6-week test that gets us the first rung.
 
+We're building toward Y Combinator's [**Request for Startups (RFS)**](https://www.ycombinator.com/rfs) on user-customizable software — the call for products where coding agents let each user radically reshape the software they consume, and where companies ship modifiable primitives rather than one-size-fits-all interfaces.
+
 ---
 
 ## The thesis
