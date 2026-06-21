@@ -1,0 +1,79 @@
+{
+  "name": "sample-student-inbox (synthetic)",
+  "messages": [
+    {
+      "id": "m1",
+      "thread": "t1",
+      "from": { "email": "registrar@centennial.edu", "name": "Registrar", "role_guess": "admin" },
+      "subject": "Final exam schedule posted",
+      "body": "Your final exam for COMP248 is on December 12, 2026 at 9am in room A-401. Bring your student ID.",
+      "date": "2026-11-01T14:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "m2",
+      "thread": "t2",
+      "from": { "email": "prof.lee@centennial.edu", "name": "Prof. Lee", "role_guess": "professor" },
+      "subject": "Assignment 3 — submission details",
+      "body": "Assignment 3 is now available. Please submit by November 20, 2026 on the portal.",
+      "date": "2026-11-05T16:30:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "m3",
+      "thread": "t3",
+      "from": { "email": "no-reply@surveys.centennial.edu", "name": "Course Surveys", "role_guess": "admin" },
+      "subject": "Course feedback survey",
+      "body": "Help us improve. Complete the feedback form by October 30, 2026.",
+      "date": "2026-10-18T12:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "m4",
+      "thread": "t4",
+      "from": { "email": "finance@centennial.edu", "name": "Student Finance", "role_guess": "admin" },
+      "subject": "Tuition payment reminder",
+      "body": "Please pay your outstanding tuition fee before January 15, 2027 to avoid late charges.",
+      "date": "2026-12-20T09:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "m5",
+      "thread": "t5",
+      "from": { "email": "events@devclub.centennial.edu", "name": "Dev Club", "role_guess": "club" },
+      "subject": "Club workshop — RSVP needed",
+      "body": "Join our intro-to-React workshop on October 5, 2026. Please RSVP so we can plan seats.",
+      "date": "2026-09-25T18:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "m6",
+      "thread": "t6",
+      "from": { "email": "newsletter@centennial.edu", "name": "Campus News", "role_guess": "admin" },
+      "subject": "This week on campus",
+      "body": "A roundup of clubs, food trucks, and study spaces open this week. No action needed.",
+      "date": "2026-10-01T08:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "m7",
+      "thread": "t7",
+      "from": { "email": "prof.gomez@centennial.edu", "name": "Prof. Gomez", "role_guess": "professor" },
+      "subject": "Re: your project topic",
+      "body": "Thanks for the proposal. Can you confirm whether you will use the dataset we discussed?",
+      "date": "2026-10-10T11:00:00.000Z",
+      "labels": ["INBOX"]
+    }
+  ],
+  "gold": {
+    "deadlines": [
+      { "source_msg_id": "m1", "category": "exam", "due_at": "2026-12-12T23:59:00.000Z" },
+      { "source_msg_id": "m2", "category": "assignment", "due_at": "2026-11-20T23:59:00.000Z" },
+      { "source_msg_id": "m3", "category": "form", "due_at": "2026-10-30T23:59:00.000Z" },
+      { "source_msg_id": "m4", "category": "fee", "due_at": "2027-01-15T23:59:00.000Z" }
+    ],
+    "events": [
+      { "source_msg_id": "m5", "starts_at": "2026-10-05T23:59:00.000Z" }
+    ]
+  }
+}
