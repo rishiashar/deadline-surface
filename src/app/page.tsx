@@ -79,7 +79,7 @@ export default async function Home({
   let liveError: string | null = gmail_error ?? null;
   if (configured && !liveError) {
     try {
-      liveModel = await buildLiveModel({ query: "newer_than:60d", max: 150 });
+      liveModel = await buildLiveModel({ query: "newer_than:1y", max: 200 });
     } catch (err) {
       liveError = err instanceof Error ? err.message : "Failed to read inbox.";
     }
