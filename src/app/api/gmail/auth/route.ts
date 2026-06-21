@@ -19,5 +19,6 @@ export async function GET() {
     );
   }
   const url = buildConsentUrl(config, DAY_ONE_SCOPES, crypto.randomUUID());
-  return NextResponse.json({ url, scopes: DAY_ONE_SCOPES });
+  // Redirect straight into Google's consent screen so a plain link works.
+  return NextResponse.redirect(url);
 }

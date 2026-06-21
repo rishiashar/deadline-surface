@@ -7,7 +7,15 @@
  * surface and extraction can be built and eval'd before the live client lands.
  */
 
+import { google } from "googleapis";
 import { DAY_ONE_SCOPES } from "./scopes";
+
+/**
+ * The concrete OAuth2 client type as produced by `google.auth.OAuth2`. Derived
+ * here (rather than imported from google-auth-library) so it always matches the
+ * copy googleapis resolves — npm can hoist two copies whose nominal types clash.
+ */
+export type GoogleAuthClient = InstanceType<typeof google.auth.OAuth2>;
 
 export interface GmailAuthConfig {
   clientId: string;
@@ -64,12 +72,61 @@ export interface GmailClient {
 }
 
 /**
- * Live client — not implemented in the scaffold.
- * Implement against googleapis once OAuth + CASA path are confirmed (§9.3).
+ * Live read-only client over the Gmail REST API.
+ *
+ * Read-only by construction: it only calls users.messages.list/get. There is
+ * no send/modify path here — write capability (compose) stays gated behind
+ * COMPOSE_ENABLED elsewhere (FINAL-PLAN §2, §8). `auth` must carry the
+ * `gmail.readonly` scope only (see DAY_ONE_SCOPES).
  */
-export function createGmailClient(_accessToken: string): GmailClient {
-  throw new Error(
-    "GmailClient not implemented — scaffold stub. " +
-      "Wire googleapis here once OAuth + CASA path are confirmed (FINAL-PLAN §9.3).",
-  );
+export function createGmailClient(auth: GoogleAuthClient): GmailClient {
+  const gmail = google.gmail({ version: "v1", auth });
+
+  async function getMessage(id: string): Promise<RawGmailMessage> {
+    const { data } = await gmail.users.messages.get({
+      userId: "me",
+      id,
+      format: "full",
+    });
+    return {
+      id: data.id ?? id,
+      threadId: data.threadId ?? "",
+      labelIds: data.labelIds ?? undefined,
+      payload: data.payload ?? undefined,
+      internalDate: data.internalDate ?? undefined,
+      snippet: data.snippet ?? undefined,
+    };
+  }
+
+  async function listHistorical(opts: {
+    query?: string;
+    max?: number;
+  }): Promise<RawGmailMessage[]> {
+    const max = opts.max ?? 50;
+    const ids: string[] = [];
+    let pageToken: string | undefined;
+
+    while (ids.length < max) {
+      const { data } = await gmail.users.messages.list({
+        userId: "me",
+        q: opts.query,
+        maxResults: Math.min(100, max - ids.length),
+        pageToken,
+      });
+      for (const m of data.messages ?? []) {
+        if (m.id) ids.push(m.id);
+      }
+      pageToken = data.nextPageToken ?? undefined;
+      if (!pageToken) break;
+    }
+
+    // Fetch full payloads sequentially-ish in small batches to stay polite.
+    const out: RawGmailMessage[] = [];
+    for (const id of ids.slice(0, max)) {
+      out.push(await getMessage(id));
+    }
+    return out;
+  }
+
+  return { listHistorical, getMessage };
 }
