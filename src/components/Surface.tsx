@@ -37,7 +37,15 @@ function Section({
   );
 }
 
-export function Surface({ model }: { model: InboxModel }) {
+export function Surface({
+  model,
+  source = "sample",
+  banner,
+}: {
+  model: InboxModel;
+  source?: "sample" | "live";
+  banner?: React.ReactNode;
+}) {
   const messageById = useMemo(() => {
     const map = new Map<string, Message>();
     for (const m of model.messages) map.set(m.id, m);
@@ -69,6 +77,7 @@ export function Surface({ model }: { model: InboxModel }) {
 
   return (
     <div className="mx-auto max-w-2xl px-5 py-10">
+      {banner ? <div className="mb-6">{banner}</div> : null}
       <header className="mb-8">
         <p className="text-xs font-medium uppercase tracking-wider text-indigo-500">
           Deadline surface
@@ -176,8 +185,9 @@ export function Surface({ model }: { model: InboxModel }) {
       </Section>
 
       <p className="mt-10 text-center text-xs text-slate-300">
-        Sample data · surface generated from the internal model (§5). No email is sent without
-        preview + approval + undo (§6).
+        {source === "live" ? "Live data from your connected inbox (read-only)" : "Sample data"} ·
+        surface generated from the internal model (§5). No email is sent without preview + approval
+        + undo (§6).
       </p>
     </div>
   );

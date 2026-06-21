@@ -17,14 +17,18 @@ This repo is the **docs + code scaffold** for the 6-week test described in [`doc
 | **Internal model** (the stable substrate, §5) | `src/lib/model.ts` | ✅ implemented |
 | **Gmail normalizer** (raw Gmail → model) | `src/lib/gmail/normalizer.ts` | ✅ implemented |
 | **Gmail OAuth scopes** (read-only first, incremental) | `src/lib/gmail/scopes.ts` | ✅ implemented |
-| **Gmail client / ingestion** (live pull, watch/poll) | `src/lib/gmail/{client,ingest}.ts` | 🟡 stub (interface + notes) |
+| **Gmail OAuth flow** (read-only consent + token exchange) | `src/lib/gmail/tokens.ts`, `src/app/api/gmail/{auth,callback,disconnect}` | ✅ live (read-only) |
+| **Gmail client + historical pull** (live read) | `src/lib/gmail/{client,ingest,live}.ts` | ✅ live read-only (`users.messages.list/get`) |
+| **Gmail live delta** (Pub/Sub watch + history.list) | `src/lib/gmail/ingest.ts` | 🟡 stub (notes) |
 | **Extraction — heuristic baseline** | `src/lib/extraction/heuristic.ts` | ✅ runnable, zero creds |
 | **Extraction — LLM/hybrid** | `src/lib/extraction/llm.ts` | 🟡 stub (seam + privacy note) |
 | **Eval harness + GO/KILL gate** (§7) | `eval/` | ✅ runnable (`npm run eval`) |
 | **Surface UI** (Due soon / Events / Needs a reply) | `src/components/Surface.tsx` | ✅ renders from sample model |
 | **Write-action trust rails** (preview→approve→undo→audit, §6) | `src/lib/actions/rails.ts` | ✅ implemented |
 
-🟡 stubs are intentional seams: they throw a clear "not implemented" error pointing at the open plan question that gates them (OAuth/CASA §9.3, ingestion §9.2, architecture/privacy §9.1/§9.4).
+Connecting Gmail is **read-only** (`gmail.readonly` only) — the client only calls `users.messages.list/get`, there is no send/modify path. Keep the OAuth app in Google's **"Testing"** publishing status (≤100 test users) to use the restricted read-only scope without a CASA assessment (§2, §9.3).
+
+🟡 remaining stubs are intentional seams: they throw a clear "not implemented" error pointing at the open plan question that gates them (live delta/Pub/Sub §9.2, LLM/hybrid architecture §9.1, privacy/retention §9.4).
 
 ---
 
@@ -56,6 +60,21 @@ npm run lint     # eslint
 ```
 
 The surface renders from `src/lib/sample-data.ts` (no Gmail needed). It demonstrates the §6 shadow paths: a low-confidence item shows the **"Looks like a deadline — confirm?"** state, and the drafted reply walks **preview → approve → send → undo**.
+
+### Connect a real inbox (read-only)
+
+1. Create a Google Cloud OAuth client (Web application), enable the **Gmail API**, add the `gmail.readonly` scope, and add yourself as a **test user** (keep the consent screen in **"Testing"** to avoid CASA — §2/§9.3).
+2. Add `http://localhost:3000/api/gmail/callback` as an authorized redirect URI.
+3. Set the env vars and start the app:
+
+   ```bash
+   export GOOGLE_CLIENT_ID=...        # from the OAuth client
+   export GOOGLE_CLIENT_SECRET=...
+   export GOOGLE_REDIRECT_URI=http://localhost:3000/api/gmail/callback
+   npm run dev
+   ```
+
+4. Open http://localhost:3000 → **Connect Gmail (read-only)** → consent. The home page now generates the surface from your last 60 days of mail. **Disconnect** drops the stored token. Tokens persist to a gitignored `.data/gmail-tokens.json` (scaffold store — retention is a §9.4 decision).
 
 ---
 
