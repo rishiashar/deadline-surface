@@ -11,9 +11,8 @@
 **The one problem to fix now:** on real mail, our current finder is dumb — it flags LinkedIn/receipt spam as "deadlines." We make it smart.
 
 **Who does what:**
-- **Manav (backend, `codex` branch):** build the smart finder — parse real dates + an AI that knows *"assignment due"* ≠ *"free trial started."* Plus a test set + a pass/fail gate so it can't get worse.
-- **Rishi (design, `claude` branch):** make the surface beautiful and trustworthy (deadline cards, the "is this a deadline? yes/no" step, preview→approve→undo), and build a **second look** from the same data (task-list vs calendar) to prove the dream.
-- **Devin (me, `devin` branch):** glue, tests, reviews, keep branches in sync.
+- **Manav (backend, `codex` + `claude` branches):** build the smart finder — parse real dates + an AI that knows *"assignment due"* ≠ *"free trial started."* Plus a test set + a pass/fail gate so it can't get worse. *(Manav doesn't have Devin — he drives Codex/Claude.)*
+- **Rishi (design, `devin` branch):** Rishi is the only one with Devin, so he drives me (Devin) here — make the surface beautiful and trustworthy (deadline cards, the "is this a deadline? yes/no" step, preview→approve→undo), build a **second look** from the same data (task-list vs calendar) to prove the dream, plus glue/tests/reviews/keeping branches in sync.
 
 **The rule:** `main` is home base. Work on your branch, merge small + often, pull from `main` daily.
 
@@ -41,12 +40,12 @@
 
 | Branch | State | Role going forward |
 |---|---|---|
-| **`main`** | default · source of truth · has shared `gstack` skill (PR #9) + README fix | **Integration.** Everything merges here via small PRs. Never commit directly. |
-| **`devin`** | 2 commits ahead of an old main (testing skill + VISION RFS line), **3 behind** main | **Devin (me):** glue, eval harness, CI, PR reviews, keeping branches synced. |
-| **`codex`** | 3 commits **behind** main, no unique work | **Manav (backend):** extraction, Gmail ingestion, internal model. |
-| **`claude`** | 3 commits **behind** main, no unique work | **Rishi (design):** surface UI, design system, trust-rail UX. |
+| **`main`** | integration · source of truth (default) | **Integration.** Everything merges here via small PRs. Never commit directly. |
+| **`devin`** | synced to `main` | **Rishi / design** — Rishi is the only one with Devin, so he drives me (Devin) here: surface UI, trust-rail UX, the second surface; I also do glue, eval harness, CI, PR reviews. |
+| **`codex`** | synced to `main` | **Manav / backend** — extraction, Gmail ingestion, internal model (drives Codex). |
+| **`claude`** | synced to `main` | **Manav / backend (secondary)** — spare branch for Manav driving Claude. |
 
-> ⚠️ We already hit **branch drift** (devin diverged from main). **Step 0 below fixes it**, and the workflow rule prevents recurrence: *rebase your branch on `main` daily; merge small + often.*
+> ✅ All four branches are synced to `main` now (M0 done). Keep them that way: *rebase your branch on `main` daily; merge small + often.*
 
 **Vibe-coding workflow**
 1. `main` is protected/default — merge via small PRs, review before merge.
@@ -64,21 +63,21 @@
 3. **Gmail ingestion hardening.** Incremental sync via `historyId`, correct token refresh (fix the `saveTokens` custom-path bug Devin Review flagged), pagination, rate-limit/backoff.
 4. **Internal model / normalizer.** Keep `Message/Person/Deadline/Event/Action` clean and typed — this is the seed of the "delivery contract" that the whole vision rests on.
 
-### 🎨 Rishi — design/frontend (`claude` branch)
+### 🎨 Rishi — design/frontend (`devin` branch, driving Devin)
 1. **Surface polish:** Due Soon / Events / Needs a Reply — confidence badges, provenance links, designed empty states ("a quiet week is a designed state, not a blank screen").
 2. **Low-confidence "confirm?" UX** — the trust moment where the user accepts/rejects a guessed deadline.
 3. **Trust-rail components** for writes: preview → approve → undo → audit (design them now even though writes stay flagged off).
 4. **★ Reshapability demo (the vision proof):** render a **second surface** from the *same* internal model — e.g. a "task-list" view vs the "deadline-calendar" view. This literally demonstrates "same primitives, different generated UI."
 5. **Design tokens / system** so surfaces are swappable.
 
-### 🤖 Devin — integration (`devin` branch)
-Branch reconciliation, eval-harness wiring, CI, gstack reviews/QA, PR hygiene, and pairing with both of you.
+### 🤖 Devin (me) — runs on Rishi's `devin` branch
+Branch reconciliation, eval-harness wiring, CI, gstack reviews/QA, PR hygiene, and pairing with both of you. *(Rishi is the only one with Devin access; Manav works via Codex/Claude.)*
 
 ---
 
 ## 4. Milestones (sequenced)
 
-- **M0 — Align (today, Devin does it):** PR devin's 2 commits → main; reset `codex`/`claude`/`devin` to main so all four start identical.
+- **M0 — Align (done ✅):** all four branches synced to the same `main` commit.
 - **M1 — Precision fix (~1 wk):** LLM/hybrid extractor + expanded labeled eval. **Gate: high precision on a promo-heavy real inbox.** ← the GO/KILL test.
 - **M2 — Safe actions (~1 wk):** draft-reply preview + add-to-calendar, all behind preview→approve→undo. Read-only stays the default.
 - **M3 — Reshapability demo:** a second generated surface from the same model. Proves the vision, not just the wedge.
