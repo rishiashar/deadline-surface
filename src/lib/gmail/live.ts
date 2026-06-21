@@ -41,8 +41,8 @@ export async function buildLiveModel(
 
   const client = createGmailClient(auth);
   const messages = await backfillHistorical(client, {
-    query: opts.query ?? "newer_than:30d",
-    max: opts.max ?? 40,
+    query: opts.query ?? "newer_than:60d",
+    max: opts.max ?? 150,
   });
 
   const { deadlines, events, actions } = await new HeuristicExtractor().extract(
