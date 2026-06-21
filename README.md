@@ -141,6 +141,6 @@ Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · [`google
 
 ## Docs
 
-- [`docs/VISION.md`](docs/VISION.md) — the north star: user-reshapable software via coding agents. **This Gmail surface is the MVP of that vision.**
+- [`docs/VISION.md`](docs/VISION.md) — the north star: user-reshapable software via coding agents. **This Gmail surface is the MVP of that vision**
 - [`docs/FINAL-PLAN.md`](docs/FINAL-PLAN.md) — the reviewed, locked plan (source of truth).
 - [`docs/architecture.md`](docs/architecture.md) — how the plan maps to this code.
