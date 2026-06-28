@@ -87,12 +87,12 @@ The live read path: `/api/gmail/auth` redirects into Google consent → `/api/gm
 | Gmail client + historical pull → live model | `src/lib/gmail/{client,ingest,live}.ts` | ✅ live read-only |
 | Live delta ingestion (Pub/Sub watch + history.list) | `src/lib/gmail/ingest.ts` | 🟡 stub (notes) |
 | Extraction — heuristic baseline | `src/lib/extraction/heuristic.ts` | ✅ runnable, zero creds |
-| Extraction — LLM/hybrid | `src/lib/extraction/llm.ts` | 🟡 stub (seam + privacy note) |
+| Extraction — LLM/hybrid (deterministic dates + LLM intent, §9.1) | `src/lib/extraction/llm.ts` | ✅ implemented (needs `ANTHROPIC_API_KEY`) |
 | Eval harness + GO/KILL gate (§7) | `eval/` | ✅ `npm run eval` |
 | Surface UI (Due soon / Events / Needs a reply) | `src/components/Surface.tsx` | ✅ sample + live |
 | Write-action trust rails (§6) | `src/lib/actions/rails.ts` | ✅ implemented |
 
-🟡 stubs are intentional seams: they throw a clear "not implemented" error pointing at the open plan question that gates them (live delta §9.2, LLM/hybrid architecture §9.1, privacy/retention §9.4).
+🟡 stubs are intentional seams: they throw a clear "not implemented" error pointing at the open plan question that gates them (live delta §9.2). The LLM/hybrid extractor (§9.1) is now implemented — deterministic date parsing grounds the due date (no hallucinated dates), a rules pre-filter drops clear bulk/promo, and an LLM classifies intent; it sends only subject + a truncated body (§9.4) and runs only when `ANTHROPIC_API_KEY` is set.
 
 ---
 
@@ -102,7 +102,7 @@ The live read path: `/api/gmail/auth` redirects into Google consent → `/api/gm
 npm run eval
 ```
 
-Loads every labeled inbox in `eval/fixtures/*.json`, runs an `Extractor`, matches predictions to gold **per category**, and prints a GO/KILL report. The gate (`eval/gate.ts`) is **per-category recall AND precision floors**, weighted by harm — missing an exam ≫ duplicating an RSVP. A single blended "80%" is **banned** because it hides the failures that matter.
+Loads every labeled inbox in `eval/fixtures/*.json`, runs an `Extractor`, matches predictions to gold **per category**, and prints a GO/KILL report. The heuristic baseline is the zero-credential default; set `EVAL_EXTRACTOR=llm` (with `ANTHROPIC_API_KEY`) to gate the hybrid extractor instead — this is the load-bearing test that must pass before the surface is wired to the LLM path. The gate (`eval/gate.ts`) is **per-category recall AND precision floors**, weighted by harm — missing an exam ≫ duplicating an RSVP. A single blended "80%" is **banned** because it hides the failures that matter.
 
 ```
 category     recall   precision   verdict
@@ -135,7 +135,7 @@ Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · [`google
 
 **Out of scope for the test (§8):** 3 surface modes · learning loop · syllabus/LMS/PDF import · other personas · owning the primitive substrate · `gmail.compose`/send in production (until the CASA path is confirmed).
 
-**Open questions before further implementation (§9):** extraction architecture (LLM-only vs hybrid) · live ingestion mechanics (Pub/Sub + watch + polling) · OAuth/CASA path · privacy/retention · per-user LLM cost.
+**Open questions before further implementation (§9):** extraction architecture (decided: **hybrid** — deterministic dates + LLM intent) · live ingestion mechanics (Pub/Sub + watch + polling) · OAuth/CASA path · privacy/retention · per-user LLM cost.
 
 ---
 
