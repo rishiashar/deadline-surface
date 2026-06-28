@@ -6,7 +6,9 @@ import { HeuristicExtractor } from "@/lib/extraction/heuristic";
  * Run extraction over normalized messages → deadlines/events/proposed actions.
  *
  * Body: { messages: Message[] }. Uses the deterministic heuristic extractor
- * (no credentials). Swap for the LLM/hybrid extractor once §9.1/§9.4 resolve.
+ * (no credentials). The LLM/hybrid extractor (`@/lib/extraction/llm`, §9.1)
+ * now exists; wire the surface to it only after it clears the accuracy gate
+ * (`EVAL_EXTRACTOR=llm npm run eval`, §7) — extraction-first, before the UI.
  */
 export async function POST(request: Request) {
   let body: { messages?: Message[] };
