@@ -11,16 +11,39 @@
  * (§9.1). The heuristic baseline runs with zero credentials.
  */
 
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+
+/**
+ * Load a local env file so the LLM path picks up ANTHROPIC_API_KEY without
+ * exporting it by hand (§9.4: the key stays in a gitignored file, never in the
+ * shell history or this repo). Real env vars already set take precedence — we
+ * only fill what's missing. `.env.local` wins over `.env`. No-op if neither
+ * exists, so the zero-credential heuristic run is unaffected.
+ */
+for (const name of [".env.local", ".env"]) {
+  if (existsSync(name)) process.loadEnvFile(name);
+}
 
 import type { Category } from "../src/lib/model";
 import { CATEGORIES } from "../src/lib/model";
 import { HeuristicExtractor } from "../src/lib/extraction/heuristic";
+import { LlmExtractor } from "../src/lib/extraction/llm";
 import type { Extractor } from "../src/lib/extraction/types";
 import type { LabeledInbox, GoldDeadline } from "./labels";
 import { buildGateReport, type Counts } from "./gate";
+
+/**
+ * Pick the extractor to gate (§9.1: compare architectures behind one interface).
+ * Default is the heuristic baseline so `npm run eval` runs with zero credentials.
+ * `EVAL_EXTRACTOR=llm` (or `hybrid`) runs the LLM path — needs ANTHROPIC_API_KEY.
+ */
+function selectExtractor(): Extractor {
+  const choice = (process.env.EVAL_EXTRACTOR ?? "heuristic").toLowerCase();
+  if (choice === "llm" || choice === "hybrid") return new LlmExtractor();
+  return new HeuristicExtractor();
+}
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const FIXTURES_DIR = join(HERE, "fixtures");
@@ -118,7 +141,7 @@ async function run(extractor: Extractor): Promise<void> {
   }
 }
 
-run(new HeuristicExtractor()).catch((err) => {
+run(selectExtractor()).catch((err) => {
   console.error(err);
   process.exit(2);
 });

@@ -1,0 +1,88 @@
+{
+  "name": "adversarial-inbox",
+  "messages": [
+    {
+      "id": "a1",
+      "thread": "ta1",
+      "from": { "email": "learn@brainscape.com", "name": "Brainscape", "role_guess": "unknown" },
+      "subject": "Keep your streak — your exam is March 14",
+      "body": "Your 7-day study streak is going strong. Big exam on March 14? Open the app and review 20 cards today to stay sharp and ready.",
+      "date": "2026-02-10T09:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "a2",
+      "thread": "ta2",
+      "from": { "email": "coach@studypro.io", "name": "StudyPro Coaching", "role_guess": "unknown" },
+      "subject": "Finish your assignment faster",
+      "body": "Students using StudyPro finish each assignment in half the time. Your personalized plan is ready — start before April 2 to hit your goals.",
+      "date": "2026-03-01T09:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "a3",
+      "thread": "ta3",
+      "from": { "email": "offers@tuitionsaver.com", "name": "TuitionSaver", "role_guess": "unknown" },
+      "subject": "Lock in tuition savings before April 10",
+      "body": "Apply by April 10 to lock in next year's tuition rate with our membership. Spots for new members are limited, so don't wait.",
+      "date": "2026-03-05T09:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "t1",
+      "thread": "tt1",
+      "from": { "email": "k.lee@stanford.edu", "name": "Prof. Karen Lee", "role_guess": "professor" },
+      "subject": "Problem Set 4",
+      "body": "Problem Set 4 is due March 20. Submit via the course portal before midnight; late work loses 10% per day.",
+      "date": "2026-03-05T09:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "t2",
+      "thread": "tt2",
+      "from": { "email": "registrar@stanford.edu", "name": "Office of the Registrar", "role_guess": "unknown" },
+      "subject": "Spring enrollment form",
+      "body": "You must complete your spring enrollment form by April 1 to keep your class schedule. This cannot be done after the deadline.",
+      "date": "2026-03-10T09:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "t3",
+      "thread": "tt3",
+      "from": { "email": "bursar@stanford.edu", "name": "Student Accounts", "role_guess": "unknown" },
+      "subject": "Tuition balance due",
+      "body": "Your tuition balance is due April 15. Pay by the deadline through the student portal to avoid a late fee and a registration hold.",
+      "date": "2026-03-20T09:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "t4",
+      "thread": "tt4",
+      "from": { "email": "j.rivera@stanford.edu", "name": "Prof. Rivera", "role_guess": "professor" },
+      "subject": "Final exam logistics",
+      "body": "Our final exam is scheduled for May 2 at 9am in Hewlett 200. Bring a blue book and your student ID; no laptops permitted.",
+      "date": "2026-04-15T09:00:00.000Z",
+      "labels": ["INBOX"]
+    },
+    {
+      "id": "t5",
+      "thread": "tt5",
+      "from": { "email": "robotics@stanford.edu", "name": "Stanford Robotics Club", "role_guess": "unknown" },
+      "subject": "RSVP: build night",
+      "body": "Join us for robotics build night on April 8 at 6pm in the Lab. RSVP so we can order enough pizza for everyone attending.",
+      "date": "2026-03-25T09:00:00.000Z",
+      "labels": ["INBOX"]
+    }
+  ],
+  "gold": {
+    "deadlines": [
+      { "source_msg_id": "t1", "category": "assignment", "due_at": "2026-03-20T23:59:00.000Z" },
+      { "source_msg_id": "t2", "category": "form", "due_at": "2026-04-01T23:59:00.000Z" },
+      { "source_msg_id": "t3", "category": "fee", "due_at": "2026-04-15T23:59:00.000Z" },
+      { "source_msg_id": "t4", "category": "exam", "due_at": "2026-05-02T23:59:00.000Z" }
+    ],
+    "events": [
+      { "source_msg_id": "t5", "starts_at": "2026-04-08T23:59:00.000Z" }
+    ]
+  }
+}
