@@ -8,7 +8,7 @@
  */
 
 import type { InboxModel, Message, Person } from "@/lib/model";
-import { HeuristicExtractor } from "@/lib/extraction/heuristic";
+import { LlmExtractor } from "@/lib/extraction/llm";
 import { createGmailClient } from "./client";
 import { backfillHistorical } from "./ingest";
 import { getAuthorizedClient } from "./tokens";
@@ -45,7 +45,10 @@ export async function buildLiveModel(
     max: opts.max ?? 200,
   });
 
-  const { deadlines, events, actions } = await new HeuristicExtractor().extract(
+  // Hybrid extractor: deterministic dates + LLM intent (validated by the gate —
+  // see the precision fix in eval/). Needs ANTHROPIC_API_KEY (loaded from
+  // .env.local). The heuristic remains the zero-credential default elsewhere.
+  const { deadlines, events, actions } = await new LlmExtractor().extract(
     messages,
   );
 

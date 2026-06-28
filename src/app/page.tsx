@@ -79,7 +79,9 @@ export default async function Home({
   let liveError: string | null = gmail_error ?? null;
   if (configured && !liveError) {
     try {
-      liveModel = await buildLiveModel({ query: "newer_than:1y", max: 200 });
+      // Smaller cap for the live LLM path: one model call per dated message,
+      // run sequentially — keep the page responsive and the cost bounded.
+      liveModel = await buildLiveModel({ query: "newer_than:1y", max: 50 });
     } catch (err) {
       liveError = err instanceof Error ? err.message : "Failed to read inbox.";
     }
